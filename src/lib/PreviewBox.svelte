@@ -14,14 +14,15 @@
             else console.error('unsupported label', label);
 
             // x = percentile * (max - min) + min
-            r = Math.floor((colorRange.rMax - colorRange.rMin) * percentile + colorRange.rMax);
-            g = Math.floor((colorRange.gMax - colorRange.gMin) * percentile + colorRange.gMax);
-            b = Math.floor((colorRange.bMax - colorRange.bMin) * percentile + colorRange.bMax);
+            r = Math.floor((colorRange.rMax - colorRange.rMin) * percentile + Number(colorRange.rMin));
+            g = Math.floor((colorRange.gMax - colorRange.gMin) * percentile + Number(colorRange.gMin));
+            b = Math.floor((colorRange.bMax - colorRange.bMin) * percentile + Number(colorRange.bMin));
+        } else {
+            r = label.includes('R') ? colorRange.rMax : colorRange.rMin;
+            g = label.includes('G') ? colorRange.gMax : colorRange.gMin;
+            b = label.includes('B') ? colorRange.bMax : colorRange.bMin;
         }
 
-        r = label.includes('R') ? colorRange.rMax : colorRange.rMin;
-        g = label.includes('G') ? colorRange.gMax : colorRange.gMin;
-        b = label.includes('B') ? colorRange.bMax : colorRange.bMin;
         return `background-color: rgb(${r}, ${g}, ${b});`;
     });
 </script>
