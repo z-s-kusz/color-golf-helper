@@ -8,6 +8,7 @@
   let gMax = $state('255');
   let bMin = $state('0');
   let bMax = $state('255');
+  let error = $state('');
 
   let colorRange = $derived({
       name,
@@ -22,15 +23,25 @@
   const submit = (event) => {
     event.preventDefault();
 
-    const text = JSON.stringify(colorRange);
+    // manual instead of w/ JSON.stringify to retain formating & trailing comma
+    const text = `{
+      name: ${name},
+      rMin: ${rMin},
+      rMax: ${rMax},
+      gMin: ${gMin},
+      gMax: ${gMax},
+      bMin: ${bMin},
+      bMax: ${bMax},
+    }`;
     copyToClipboard(text);
   }
 
   async function copyToClipboard(text) {
     try {
       await navigator.clipboard.writeText(text);
-      console.log('Text copied to clipboard');
+      error = '';
     } catch (err) {
+      error = 'Error copying, check console.';
       console.error('Failed to copy text: ', err);
     }
   }
@@ -67,6 +78,10 @@
     <br />
     <button type="submit">Copy to Clipboard</button>
   </form>
+
+  {#if error}
+    <p>{error}</p>
+  {/if}
 
   <div class="preview-grid">
     <PreviewBox label="mid-high" {colorRange} />
