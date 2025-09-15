@@ -25,7 +25,7 @@
 
     // manual instead of w/ JSON.stringify to retain formating & trailing comma
     const text = `{
-      name: ${name},
+      name: '${name}',
       rMin: ${rMin},
       rMax: ${rMax},
       gMin: ${gMin},
