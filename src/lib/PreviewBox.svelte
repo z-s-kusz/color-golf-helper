@@ -2,29 +2,28 @@
     let { label, colorRange } = $props();
 
     let style = $derived.by(() => {
+        let r = '';
+        let g = '';
+        let b = '';
+
         if (label.includes('mid')) {
-            return getTestRange(label, colorRange);
+            let percentile = 1;
+            if (label === 'mid-high') percentile = 0.75;
+            else if (label === 'mid-low') percentile = 0.25;
+            else if (label === 'mid') percentile = 0.5;
+            else console.error('unsupported label', label);
+
+            // x = percentile * (max - min) + min
+            r = Math.floor((colorRange.rMax - colorRange.rMin) * percentile + colorRange.rMax);
+            g = Math.floor((colorRange.gMax - colorRange.gMin) * percentile + colorRange.gMax);
+            b = Math.floor((colorRange.bMax - colorRange.bMin) * percentile + colorRange.bMax);
         }
 
-        let r = label.includes('R') ? colorRange.rMax : colorRange.rMin;
-        let g = label.includes('G') ? colorRange.gMax : colorRange.gMin;
-        let b = label.includes('B') ? colorRange.bMax : colorRange.bMin;
+        r = label.includes('R') ? colorRange.rMax : colorRange.rMin;
+        g = label.includes('G') ? colorRange.gMax : colorRange.gMin;
+        b = label.includes('B') ? colorRange.bMax : colorRange.bMin;
         return `background-color: rgb(${r}, ${g}, ${b});`;
     });
-
-    function getTestRange(type, colors) {
-        let percentile = 1;
-        if (type === 'mid-high') percentile = 0.75;
-        else if (type === 'mid-low') percentile = 0.25;
-        else if (type === 'mid') percentile = 0.5;
-        else console.error('unsupported label', label);
-
-        // x = percentile * (max - min) + min
-        let r = Math.floor((colors.rMax - colors.rMin) * percentile + colors.rMax);
-        let g = Math.floor((colors.gMax - colors.gMin) * percentile + colors.gMax);
-        let b = Math.floor((colors.bMax - colors.bMin) * percentile + colors.bMax);
-        return `background-color: rgb(${r}, ${g}, ${b});`;
-    }
 </script>
 
 <section>
